@@ -1,0 +1,13 @@
+build/
+build-android/
+compile_commands.json
+*.prof
+*.profraw
+*.profdata
+perf.data
+profile.proto
+profile.pb.gz
+pprof.profile
+*.dSYM/
+*.svg
+*.pdf

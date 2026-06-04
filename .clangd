@@ -1,0 +1,18 @@
+CompileFlags:
+  CompilationDatabase: build
+  Add:
+    - -Wall
+    - -Wextra
+    - -Wpedantic
+    - -Wno-gnu-statement-expression
+
+Diagnostics:
+  ClangTidy:
+    Add:
+      - bugprone-*
+      - performance-*
+      - readability-*
+    Remove:
+      - readability-magic-numbers
+      - readability-function-cognitive-complexity
+      - readability-identifier-length
