@@ -25,7 +25,8 @@ cmake --build build -j
 生成的二进制在 `build/bin/`：
 
 ```
-sample_01_flat_vs_cum
+sample_01_bad
+sample_01_good
 sample_02_inline_effect
 sample_03_complexity
 sample_04_false_sharing
@@ -55,9 +56,15 @@ flowchart TD
 录制：
 
 ```bash
-CPUPROFILE=/tmp/sample_01.prof \
-LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libprofiler.so \
-build/bin/sample_01_flat_vs_cum
+# 录制 bad 版本
+CPUPROFILE=/tmp/sample_01_bad.prof \
+LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libprofiler.so \
+build/bin/sample_01_bad
+
+# 录制 good 版本
+CPUPROFILE=/tmp/sample_01_good.prof \
+LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libprofiler.so \
+build/bin/sample_01_good
 ```
 
 分析命令见 [pprof 常用命令](#pprof-常用命令)。
@@ -140,7 +147,7 @@ go tool pprof --pdf build/bin/<binary> /tmp/<profile> > out.pdf
 
 | 样例 | 二进制 | 预期现象 |
 |------|--------|----------|
-| 01 Flat vs Cum | `sample_01_flat_vs_cum` | `bad_parent` 高 cum，`burn` 高 flat |
+| 01 Flat vs Cum | `sample_01_bad` / `sample_01_good` | `bad_parent` 高 cum，`burn` 高 flat |
 | 02 Inline Effect | `sample_02_inline_effect` | `bad_inlined_work` 消失（被内联）；`good_noinline_work` 保留独立栈帧 |
 | 03 Complexity | `sample_03_complexity` | pprof 显示热点；程序打印的 timing ratio 体现复杂度增长 |
 | 04 False Sharing | `sample_04_false_sharing` | 坏版本将 CPU 烧在 atomic/cache coherence 上 |
@@ -158,10 +165,10 @@ go tool pprof --pdf build/bin/<binary> /tmp/<profile> > out.pdf
 可以提高采样频率：
 
 ```bash
-CPUPROFILE=/tmp/sample_01.prof \
+CPUPROFILE=/tmp/sample_01_bad.prof \
 CPUPROFILE_FREQUENCY=1000 \
-LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libprofiler.so \
-build/bin/sample_01_flat_vs_cum
+LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libprofiler.so \
+build/bin/sample_01_bad
 ```
 
 文本报告有样本但 Web UI 只有 root，先用 `--text` 确认样本数量，不要先怀疑 Web UI。

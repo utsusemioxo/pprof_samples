@@ -9,7 +9,6 @@ add_compile_options(-fno-omit-frame-pointer -g)
 find_package(Threads REQUIRED)
 
 foreach(sample
-    01_flat_vs_cum
     02_inline_effect
     03_complexity
     04_false_sharing
@@ -24,4 +23,9 @@ foreach(sample
         PRIVATE common)
     target_link_libraries(sample_${sample}
         PRIVATE Threads::Threads)
+endforeach()
+
+foreach(variant bad good)
+    add_executable(sample_01_${variant}
+        samples/01_flat_vs_cum/${variant}.cpp)
 endforeach()
