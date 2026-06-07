@@ -8,24 +8,53 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_compile_options(-fno-omit-frame-pointer -g)
 find_package(Threads REQUIRED)
 
-foreach(sample
-    02_inline_effect
-    03_complexity
-    04_false_sharing
-    05_cache_miss
-    06_alloc_pressure
-    07_lock_contention)
+foreach(variant bad good)
+    add_executable(sample_01_${variant}
+        samples/01_flat_vs_cum/${variant}.cpp)
+endforeach()
 
-    add_executable(sample_${sample}
-        samples/${sample}/main.cpp)
-
-    target_include_directories(sample_${sample}
+foreach(variant bad good)
+    add_executable(sample_02_${variant}
+        samples/02_inline_effect/${variant}.cpp)
+    target_include_directories(sample_02_${variant}
         PRIVATE common)
-    target_link_libraries(sample_${sample}
+endforeach()
+
+foreach(variant bad good)
+    add_executable(sample_03_${variant}
+        samples/03_virtual_dispatch/${variant}.cpp)
+endforeach()
+
+foreach(variant bad good)
+    add_executable(sample_04_${variant}
+        samples/04_false_sharing/${variant}.cpp)
+    target_link_libraries(sample_04_${variant}
         PRIVATE Threads::Threads)
 endforeach()
 
 foreach(variant bad good)
-    add_executable(sample_01_${variant}
-        samples/01_flat_vs_cum/${variant}.cpp)
+    add_executable(sample_05_${variant}
+        samples/05_list_vs_vector/${variant}.cpp)
+endforeach()
+
+foreach(variant bad good)
+    add_executable(sample_06_${variant}
+        samples/06_vector_reserve/${variant}.cpp)
+endforeach()
+
+foreach(variant bad good)
+    add_executable(sample_07_${variant}
+        samples/07_lock_contention/${variant}.cpp)
+    target_link_libraries(sample_07_${variant}
+        PRIVATE Threads::Threads)
+endforeach()
+
+foreach(variant bad good)
+    add_executable(sample_08_${variant}
+        samples/08_branch_mispredict/${variant}.cpp)
+endforeach()
+
+foreach(variant bad good)
+    add_executable(sample_09_${variant}
+        samples/09_map_vs_unordered/${variant}.cpp)
 endforeach()

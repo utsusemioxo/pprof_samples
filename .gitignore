@@ -1,5 +1,8 @@
 build/
 build-android/
+build_android/
+report/
+binary_cache/
 compile_commands.json
 *.prof
 *.profraw
@@ -11,3 +14,4 @@ pprof.profile
 *.dSYM/
 *.svg
 *.pdf
+.env
